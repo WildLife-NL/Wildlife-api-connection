@@ -30,8 +30,8 @@ void main() {
       const responseJson = [
         {
           "ID": id,
-          "nameNL": name,
-          "descriptionNL": description,
+          "name": name,
+          "description": description,
         }
       ];
 

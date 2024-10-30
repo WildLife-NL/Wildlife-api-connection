@@ -29,16 +29,13 @@ void main() {
       "species": {
         "ID": speciesId,
         "name": "Animal",
-        "commonNameNL": "Dier",
-        "commonNameEN": "Animal"
+        "commonName": "Dier",
       },
       "user": {"ID": "111", "name": ""},
       "type": {
         "ID": 1,
-        "nameNL": "Waarneming",
-        "nameEN": "Sighting",
-        "descriptionNL": "U hebt een levend wild dier gezien.",
-        "descriptionEN": "You have seen living wild animal"
+        "name": "Waarneming",
+        "description": "U hebt een levend wild dier gezien.",
       }
     };
 

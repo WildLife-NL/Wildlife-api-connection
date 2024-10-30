@@ -22,14 +22,12 @@ void main() {
     test('get all species returns list of species', () async {
       // Arrange
       const name = 'Equus ferus caballus';
-      const commonNameNL = 'Paard';
-      const commonNameEN = 'Horse';
+      const commonName = 'Paard';
       final responseJson = [
         {
           "ID": "test",
           "name": name,
-          "commonNameNL": commonNameNL,
-          "commonNameEN": commonNameEN
+          "commonName": commonName,
         },
       ];
 
@@ -48,7 +46,7 @@ void main() {
       // Assert
       expect(result, isA<List<Species>>());
       expect(result[0].name, name);
-      expect(result[0].commonName, commonNameNL);
+      expect(result[0].commonName, commonName);
     });
 
     test('get all species throws exception when api returns error', () async {
@@ -80,13 +78,11 @@ void main() {
       // Arrange
       const id = 'd43efd6f-e8ad-4c8b-b37e-b72dd6263e3f';
       const name = 'test';
-      const commonNameNL = 'test';
-      const commonNameEN = 'test';
+      const commonName = 'test';
       final responseJson = {
         "ID": id,
         "name": name,
-        "commonNameNL": commonNameNL,
-        "commonNameEN": commonNameEN
+        "commonName": commonName,
       };
 
       final response = http.Response(jsonEncode(responseJson), HttpStatus.ok);
@@ -105,7 +101,7 @@ void main() {
       expect(result, isA<Species>());
       expect(result.id, id);
       expect(result.name, name);
-      expect(result.commonName, commonNameNL);
+      expect(result.commonName, commonName);
     });
 
     test('getSpecies throws exception when api returns error', () async {
