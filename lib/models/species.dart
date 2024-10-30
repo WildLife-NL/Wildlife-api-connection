@@ -13,7 +13,7 @@ class Species {
     return Species(
       id: json['ID'],
       name: json['name'],
-      commonName: json['commonNameNL'],
+      commonName: json['commonName'],
     );
   }
 
