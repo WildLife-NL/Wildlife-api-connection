@@ -19,8 +19,8 @@ class InteractionApi {
       {
         "description": description,
         "location": location.toJson(),
-        "species": speciesId,
-        "type": typeId,
+        "speciesID": speciesId,
+        "typeID": typeId,
       },
       authenticated: true,
     );
