@@ -18,7 +18,7 @@ void main() {
     const type = 1;
     const description = 'test';
     const speciesId = '2d22';
-    const location = {"latitude": -90, "longitude": -180};
+    const location = {"latitude": -90.123, "longitude": -180.123};
 
     var responseJson = {
       "ID": "2af0f623-7ef5-4bfc-8a61-900279f06fc8",
@@ -49,7 +49,7 @@ void main() {
       const type = 1;
       const description = 'test';
       const speciesId = '2d22';
-      const location = {"latitude": -90, "longitude": -180};
+      const location = {"latitude": -90.123, "longitude": -180.123};
 
       final response = http.Response(jsonEncode(responseJson), HttpStatus.ok);
 
@@ -58,8 +58,8 @@ void main() {
         {
           "description": description,
           "location": location,
-          "species": speciesId,
-          "type": type,
+          "speciesID": speciesId,
+          "typeID": type,
         },
         authenticated: true,
       )).thenAnswer((_) async {
@@ -89,7 +89,7 @@ void main() {
       const type = 1;
       const description = 'test';
       const speciesId = '2d22';
-      const location = {"latitude": -90, "longitude": -180};
+      const location = {"latitude": -90.123, "longitude": -180.123};
 
       var responseJson = {
         "title": "Bad Request",
@@ -104,8 +104,8 @@ void main() {
         {
           "description": description,
           "location": location,
-          "species": speciesId,
-          "type": type,
+          "speciesID": speciesId,
+          "typeID": type,
         },
         authenticated: true,
       )).thenAnswer((_) async {
