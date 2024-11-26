@@ -24,7 +24,7 @@ void main() {
     const type = 1;
     const description = 'test';
     const speciesId = '2d22';
-    const location = {"latitude": -90, "longitude": -180};
+    const location = {"latitude": -90.123, "longitude": -180.123};
     var questionnaire = Questionnaire(
       id: "4d44",
       experiment: Experiment(
@@ -135,7 +135,7 @@ void main() {
       const type = 1;
       const description = 'test';
       const speciesId = '2d22';
-      const location = {"latitude": -90, "longitude": -180};
+      const location = {"latitude": -90.123, "longitude": -180.123};
 
       final response = http.Response(jsonEncode(responseJson), HttpStatus.ok);
 
@@ -176,7 +176,7 @@ void main() {
       const type = 1;
       const description = 'test';
       const speciesId = '2d22';
-      const location = {"latitude": -90, "longitude": -180};
+      const location = {"latitude": -90.123, "longitude": -180.123};
       var questionnaire = Questionnaire(
         id: "4d44",
         experiment: Experiment(
