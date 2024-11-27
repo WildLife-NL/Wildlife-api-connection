@@ -4,7 +4,7 @@ class Question {
   String id;
   bool allowMultipleResponse;
   bool allowOpenResponse;
-  List<Answer> answers;
+  List<Answer>? answers;
   String description;
   int index;
   String? openResponseFormat;
@@ -33,14 +33,18 @@ class Question {
         text: json["text"],
       );
 
-  Map<String, dynamic> toJson() => {
-        "ID": id,
-        "allowMultipleResponse": allowMultipleResponse,
-        "allowOpenResponse": allowOpenResponse,
-        "answers": List<dynamic>.from(answers.map((x) => x.toJson())),
-        "description": description,
-        "index": index,
-        "openResponseFormat": openResponseFormat,
-        "text": text,
-      };
+  Map<String, dynamic> toJson() {
+    return {
+      "ID": id,
+      "allowMultipleResponse": allowMultipleResponse,
+      "allowOpenResponse": allowOpenResponse,
+      "answers": answers != null
+          ? List<dynamic>.from(answers!.map((x) => x.toJson()))
+          : null,
+      "description": description,
+      "index": index,
+      "openResponseFormat": openResponseFormat,
+      "text": text,
+    };
+  }
 }

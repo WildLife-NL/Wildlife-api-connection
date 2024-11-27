@@ -2,7 +2,7 @@ import 'package:wildlife_api_connection/models/location.dart';
 
 class LivingLabs {
   String id;
-  List<Location> definition;
+  List<Location>? definition;
   String name;
   String commonName;
 
@@ -23,10 +23,14 @@ class LivingLabs {
         commonName: json["commonName"],
       );
 
-  Map<String, dynamic> toJson() => {
-        "ID": id,
-        "definition": List<dynamic>.from(definition.map((x) => x.toJson())),
-        "name": name,
-        "commonName": commonName,
-      };
+  Map<String, dynamic> toJson() {
+    return {
+      "ID": id,
+      "definition": definition != null
+          ? List<dynamic>.from(definition!.map((x) => x.toJson()))
+          : null,
+      "name": name,
+      "commonName": commonName,
+    };
+  }
 }
