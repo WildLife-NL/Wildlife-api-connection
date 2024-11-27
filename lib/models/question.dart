@@ -25,8 +25,9 @@ class Question {
         id: json["ID"],
         allowMultipleResponse: json["allowMultipleResponse"],
         allowOpenResponse: json["allowOpenResponse"],
-        answers:
-            List<Answer>.from(json["answers"].map((x) => Answer.fromJson(x))),
+        answers: json["answers"] != null
+            ? List<Answer>.from(json["answers"].map((x) => Answer.fromJson(x)))
+            : null,
         description: json["description"],
         index: json["index"],
         openResponseFormat: json["openResponseFormat"],
