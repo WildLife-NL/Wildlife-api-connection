@@ -2,6 +2,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mockito/mockito.dart';
 import 'package:wildlife_api_connection/response_api.dart';
 
+import 'package:http/http.dart' as http;
 import 'mocks/api_mocks.mocks.dart';
 
 void main() {
@@ -28,7 +29,7 @@ void main() {
           "answerID": answerId,
           "text": text,
         },
-      ));
+      )).thenAnswer((_) async => http.Response('', 200));
 
       responseApi.addResponse(interactionId, questionId, answerId, text);
 
