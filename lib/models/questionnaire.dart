@@ -25,8 +25,10 @@ class Questionnaire {
         identifier: json["identifier"],
         interactionType: InteractionType.fromJson(json["interactionType"]),
         name: json["name"],
-        questions: List<Question>.from(
-            json["questions"].map((x) => Question.fromJson(x))),
+        questions: json["questions"] != null
+            ? List<Question>.from(
+                json["questions"].map((x) => Question.fromJson(x)))
+            : null,
       );
 
   Map<String, dynamic> toJson() {
