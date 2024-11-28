@@ -15,10 +15,10 @@ class LivingLabs {
 
   factory LivingLabs.fromJson(Map<String, dynamic> json) => LivingLabs(
         id: json["ID"],
-        definition: json["definition"] == null
-            ? []
-            : List<Location>.from(
-                json["definition"]!.map((x) => Location.fromJson(x))),
+        definition: json["definition"] != null
+            ? List<Location>.from(
+                json["definition"].map((x) => Location.fromJson(x)))
+            : null,
         name: json["name"],
         commonName: json["commonName"],
       );
