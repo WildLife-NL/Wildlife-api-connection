@@ -6,6 +6,7 @@ import 'package:wildlife_api_connection/models/user.dart';
 
 class Interaction {
   User user;
+  String id;
   String description;
   Location location;
   Species species;
@@ -14,6 +15,7 @@ class Interaction {
 
   Interaction({
     required this.user,
+    required this.id,
     required this.description,
     required this.location,
     required this.species,
@@ -30,6 +32,7 @@ class Interaction {
 
     return Interaction(
       user: User.fromJson(json['user']),
+      id: json['id'],
       description: json['description'],
       location: Location.fromJson(json['location']),
       species: Species.fromJson(json['species']),
