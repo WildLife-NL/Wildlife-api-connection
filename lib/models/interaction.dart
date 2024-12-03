@@ -32,7 +32,7 @@ class Interaction {
 
     return Interaction(
       user: User.fromJson(json['user']),
-      id: json['id'],
+      id: json['ID'],
       description: json['description'],
       location: Location.fromJson(json['location']),
       species: Species.fromJson(json['species']),
