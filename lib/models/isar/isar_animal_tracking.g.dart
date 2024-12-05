@@ -22,16 +22,12 @@ const IsarAnimalTrackingSchema = IsarGeneratedSchema(
     embedded: false,
     properties: [
       IsarPropertySchema(
-        name: 'description',
-        type: IsarType.string,
-      ),
-      IsarPropertySchema(
         name: 'latitude',
-        type: IsarType.long,
+        type: IsarType.double,
       ),
       IsarPropertySchema(
         name: 'longitude',
-        type: IsarType.long,
+        type: IsarType.double,
       ),
       IsarPropertySchema(
         name: 'locationTimestamp',
@@ -43,6 +39,14 @@ const IsarAnimalTrackingSchema = IsarGeneratedSchema(
       ),
       IsarPropertySchema(
         name: 'speciesId',
+        type: IsarType.string,
+      ),
+      IsarPropertySchema(
+        name: 'speciesName',
+        type: IsarType.string,
+      ),
+      IsarPropertySchema(
+        name: 'speciesCommonName',
         type: IsarType.string,
       ),
     ],
@@ -58,13 +62,14 @@ const IsarAnimalTrackingSchema = IsarGeneratedSchema(
 
 @isarProtected
 int serializeIsarAnimalTracking(IsarWriter writer, IsarAnimalTracking object) {
-  IsarCore.writeString(writer, 1, object.description);
-  IsarCore.writeLong(writer, 2, object.latitude);
-  IsarCore.writeLong(writer, 3, object.longitude);
+  IsarCore.writeDouble(writer, 1, object.latitude);
+  IsarCore.writeDouble(writer, 2, object.longitude);
   IsarCore.writeLong(
-      writer, 4, object.locationTimestamp.toUtc().microsecondsSinceEpoch);
-  IsarCore.writeString(writer, 5, object.name);
-  IsarCore.writeString(writer, 6, object.speciesId);
+      writer, 3, object.locationTimestamp.toUtc().microsecondsSinceEpoch);
+  IsarCore.writeString(writer, 4, object.name);
+  IsarCore.writeString(writer, 5, object.speciesId);
+  IsarCore.writeString(writer, 6, object.speciesName);
+  IsarCore.writeString(writer, 7, object.speciesCommonName);
   return object.id;
 }
 
@@ -72,15 +77,13 @@ int serializeIsarAnimalTracking(IsarWriter writer, IsarAnimalTracking object) {
 IsarAnimalTracking deserializeIsarAnimalTracking(IsarReader reader) {
   final int _id;
   _id = IsarCore.readId(reader);
-  final String _description;
-  _description = IsarCore.readString(reader, 1) ?? '';
-  final int _latitude;
-  _latitude = IsarCore.readLong(reader, 2);
-  final int _longitude;
-  _longitude = IsarCore.readLong(reader, 3);
+  final double _latitude;
+  _latitude = IsarCore.readDouble(reader, 1);
+  final double _longitude;
+  _longitude = IsarCore.readDouble(reader, 2);
   final DateTime _locationTimestamp;
   {
-    final value = IsarCore.readLong(reader, 4);
+    final value = IsarCore.readLong(reader, 3);
     if (value == -9223372036854775808) {
       _locationTimestamp =
           DateTime.fromMillisecondsSinceEpoch(0, isUtc: true).toLocal();
@@ -90,17 +93,22 @@ IsarAnimalTracking deserializeIsarAnimalTracking(IsarReader reader) {
     }
   }
   final String _name;
-  _name = IsarCore.readString(reader, 5) ?? '';
+  _name = IsarCore.readString(reader, 4) ?? '';
   final String _speciesId;
-  _speciesId = IsarCore.readString(reader, 6) ?? '';
+  _speciesId = IsarCore.readString(reader, 5) ?? '';
+  final String _speciesName;
+  _speciesName = IsarCore.readString(reader, 6) ?? '';
+  final String _speciesCommonName;
+  _speciesCommonName = IsarCore.readString(reader, 7) ?? '';
   final object = IsarAnimalTracking(
     id: _id,
-    description: _description,
     latitude: _latitude,
     longitude: _longitude,
     locationTimestamp: _locationTimestamp,
     name: _name,
     speciesId: _speciesId,
+    speciesName: _speciesName,
+    speciesCommonName: _speciesCommonName,
   );
   return object;
 }
@@ -111,14 +119,12 @@ dynamic deserializeIsarAnimalTrackingProp(IsarReader reader, int property) {
     case 0:
       return IsarCore.readId(reader);
     case 1:
-      return IsarCore.readString(reader, 1) ?? '';
+      return IsarCore.readDouble(reader, 1);
     case 2:
-      return IsarCore.readLong(reader, 2);
+      return IsarCore.readDouble(reader, 2);
     case 3:
-      return IsarCore.readLong(reader, 3);
-    case 4:
       {
-        final value = IsarCore.readLong(reader, 4);
+        final value = IsarCore.readLong(reader, 3);
         if (value == -9223372036854775808) {
           return DateTime.fromMillisecondsSinceEpoch(0, isUtc: true).toLocal();
         } else {
@@ -126,10 +132,14 @@ dynamic deserializeIsarAnimalTrackingProp(IsarReader reader, int property) {
               .toLocal();
         }
       }
+    case 4:
+      return IsarCore.readString(reader, 4) ?? '';
     case 5:
       return IsarCore.readString(reader, 5) ?? '';
     case 6:
       return IsarCore.readString(reader, 6) ?? '';
+    case 7:
+      return IsarCore.readString(reader, 7) ?? '';
     default:
       throw ArgumentError('Unknown property: $property');
   }
@@ -138,12 +148,13 @@ dynamic deserializeIsarAnimalTrackingProp(IsarReader reader, int property) {
 sealed class _IsarAnimalTrackingUpdate {
   bool call({
     required int id,
-    String? description,
-    int? latitude,
-    int? longitude,
+    double? latitude,
+    double? longitude,
     DateTime? locationTimestamp,
     String? name,
     String? speciesId,
+    String? speciesName,
+    String? speciesCommonName,
   });
 }
 
@@ -155,22 +166,24 @@ class _IsarAnimalTrackingUpdateImpl implements _IsarAnimalTrackingUpdate {
   @override
   bool call({
     required int id,
-    Object? description = ignore,
     Object? latitude = ignore,
     Object? longitude = ignore,
     Object? locationTimestamp = ignore,
     Object? name = ignore,
     Object? speciesId = ignore,
+    Object? speciesName = ignore,
+    Object? speciesCommonName = ignore,
   }) {
     return collection.updateProperties([
           id
         ], {
-          if (description != ignore) 1: description as String?,
-          if (latitude != ignore) 2: latitude as int?,
-          if (longitude != ignore) 3: longitude as int?,
-          if (locationTimestamp != ignore) 4: locationTimestamp as DateTime?,
-          if (name != ignore) 5: name as String?,
-          if (speciesId != ignore) 6: speciesId as String?,
+          if (latitude != ignore) 1: latitude as double?,
+          if (longitude != ignore) 2: longitude as double?,
+          if (locationTimestamp != ignore) 3: locationTimestamp as DateTime?,
+          if (name != ignore) 4: name as String?,
+          if (speciesId != ignore) 5: speciesId as String?,
+          if (speciesName != ignore) 6: speciesName as String?,
+          if (speciesCommonName != ignore) 7: speciesCommonName as String?,
         }) >
         0;
   }
@@ -179,12 +192,13 @@ class _IsarAnimalTrackingUpdateImpl implements _IsarAnimalTrackingUpdate {
 sealed class _IsarAnimalTrackingUpdateAll {
   int call({
     required List<int> id,
-    String? description,
-    int? latitude,
-    int? longitude,
+    double? latitude,
+    double? longitude,
     DateTime? locationTimestamp,
     String? name,
     String? speciesId,
+    String? speciesName,
+    String? speciesCommonName,
   });
 }
 
@@ -196,20 +210,22 @@ class _IsarAnimalTrackingUpdateAllImpl implements _IsarAnimalTrackingUpdateAll {
   @override
   int call({
     required List<int> id,
-    Object? description = ignore,
     Object? latitude = ignore,
     Object? longitude = ignore,
     Object? locationTimestamp = ignore,
     Object? name = ignore,
     Object? speciesId = ignore,
+    Object? speciesName = ignore,
+    Object? speciesCommonName = ignore,
   }) {
     return collection.updateProperties(id, {
-      if (description != ignore) 1: description as String?,
-      if (latitude != ignore) 2: latitude as int?,
-      if (longitude != ignore) 3: longitude as int?,
-      if (locationTimestamp != ignore) 4: locationTimestamp as DateTime?,
-      if (name != ignore) 5: name as String?,
-      if (speciesId != ignore) 6: speciesId as String?,
+      if (latitude != ignore) 1: latitude as double?,
+      if (longitude != ignore) 2: longitude as double?,
+      if (locationTimestamp != ignore) 3: locationTimestamp as DateTime?,
+      if (name != ignore) 4: name as String?,
+      if (speciesId != ignore) 5: speciesId as String?,
+      if (speciesName != ignore) 6: speciesName as String?,
+      if (speciesCommonName != ignore) 7: speciesCommonName as String?,
     });
   }
 }
@@ -223,12 +239,13 @@ extension IsarAnimalTrackingUpdate on IsarCollection<int, IsarAnimalTracking> {
 
 sealed class _IsarAnimalTrackingQueryUpdate {
   int call({
-    String? description,
-    int? latitude,
-    int? longitude,
+    double? latitude,
+    double? longitude,
     DateTime? locationTimestamp,
     String? name,
     String? speciesId,
+    String? speciesName,
+    String? speciesCommonName,
   });
 }
 
@@ -241,20 +258,22 @@ class _IsarAnimalTrackingQueryUpdateImpl
 
   @override
   int call({
-    Object? description = ignore,
     Object? latitude = ignore,
     Object? longitude = ignore,
     Object? locationTimestamp = ignore,
     Object? name = ignore,
     Object? speciesId = ignore,
+    Object? speciesName = ignore,
+    Object? speciesCommonName = ignore,
   }) {
     return query.updateProperties(limit: limit, {
-      if (description != ignore) 1: description as String?,
-      if (latitude != ignore) 2: latitude as int?,
-      if (longitude != ignore) 3: longitude as int?,
-      if (locationTimestamp != ignore) 4: locationTimestamp as DateTime?,
-      if (name != ignore) 5: name as String?,
-      if (speciesId != ignore) 6: speciesId as String?,
+      if (latitude != ignore) 1: latitude as double?,
+      if (longitude != ignore) 2: longitude as double?,
+      if (locationTimestamp != ignore) 3: locationTimestamp as DateTime?,
+      if (name != ignore) 4: name as String?,
+      if (speciesId != ignore) 5: speciesId as String?,
+      if (speciesName != ignore) 6: speciesName as String?,
+      if (speciesCommonName != ignore) 7: speciesCommonName as String?,
     });
   }
 }
@@ -276,22 +295,24 @@ class _IsarAnimalTrackingQueryBuilderUpdateImpl
 
   @override
   int call({
-    Object? description = ignore,
     Object? latitude = ignore,
     Object? longitude = ignore,
     Object? locationTimestamp = ignore,
     Object? name = ignore,
     Object? speciesId = ignore,
+    Object? speciesName = ignore,
+    Object? speciesCommonName = ignore,
   }) {
     final q = query.build();
     try {
       return q.updateProperties(limit: limit, {
-        if (description != ignore) 1: description as String?,
-        if (latitude != ignore) 2: latitude as int?,
-        if (longitude != ignore) 3: longitude as int?,
-        if (locationTimestamp != ignore) 4: locationTimestamp as DateTime?,
-        if (name != ignore) 5: name as String?,
-        if (speciesId != ignore) 6: speciesId as String?,
+        if (latitude != ignore) 1: latitude as double?,
+        if (longitude != ignore) 2: longitude as double?,
+        if (locationTimestamp != ignore) 3: locationTimestamp as DateTime?,
+        if (name != ignore) 4: name as String?,
+        if (speciesId != ignore) 5: speciesId as String?,
+        if (speciesName != ignore) 6: speciesName as String?,
+        if (speciesCommonName != ignore) 7: speciesCommonName as String?,
       });
     } finally {
       q.close();
@@ -397,194 +418,16 @@ extension IsarAnimalTrackingQueryFilter
   }
 
   QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
-      descriptionEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        EqualCondition(
-          property: 1,
-          value: value,
-          caseSensitive: caseSensitive,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
-      descriptionGreaterThan(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        GreaterCondition(
-          property: 1,
-          value: value,
-          caseSensitive: caseSensitive,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
-      descriptionGreaterThanOrEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        GreaterOrEqualCondition(
-          property: 1,
-          value: value,
-          caseSensitive: caseSensitive,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
-      descriptionLessThan(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        LessCondition(
-          property: 1,
-          value: value,
-          caseSensitive: caseSensitive,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
-      descriptionLessThanOrEqualTo(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        LessOrEqualCondition(
-          property: 1,
-          value: value,
-          caseSensitive: caseSensitive,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
-      descriptionBetween(
-    String lower,
-    String upper, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        BetweenCondition(
-          property: 1,
-          lower: lower,
-          upper: upper,
-          caseSensitive: caseSensitive,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
-      descriptionStartsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        StartsWithCondition(
-          property: 1,
-          value: value,
-          caseSensitive: caseSensitive,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
-      descriptionEndsWith(
-    String value, {
-    bool caseSensitive = true,
-  }) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        EndsWithCondition(
-          property: 1,
-          value: value,
-          caseSensitive: caseSensitive,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
-      descriptionContains(String value, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        ContainsCondition(
-          property: 1,
-          value: value,
-          caseSensitive: caseSensitive,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
-      descriptionMatches(String pattern, {bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        MatchesCondition(
-          property: 1,
-          wildcard: pattern,
-          caseSensitive: caseSensitive,
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
-      descriptionIsEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        const EqualCondition(
-          property: 1,
-          value: '',
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
-      descriptionIsNotEmpty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addFilterCondition(
-        const GreaterCondition(
-          property: 1,
-          value: '',
-        ),
-      );
-    });
-  }
-
-  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
       latitudeEqualTo(
-    int value,
-  ) {
+    double value, {
+    double epsilon = Filter.epsilon,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         EqualCondition(
-          property: 2,
+          property: 1,
           value: value,
+          epsilon: epsilon,
         ),
       );
     });
@@ -592,13 +435,15 @@ extension IsarAnimalTrackingQueryFilter
 
   QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
       latitudeGreaterThan(
-    int value,
-  ) {
+    double value, {
+    double epsilon = Filter.epsilon,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         GreaterCondition(
-          property: 2,
+          property: 1,
           value: value,
+          epsilon: epsilon,
         ),
       );
     });
@@ -606,13 +451,15 @@ extension IsarAnimalTrackingQueryFilter
 
   QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
       latitudeGreaterThanOrEqualTo(
-    int value,
-  ) {
+    double value, {
+    double epsilon = Filter.epsilon,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         GreaterOrEqualCondition(
-          property: 2,
+          property: 1,
           value: value,
+          epsilon: epsilon,
         ),
       );
     });
@@ -620,13 +467,15 @@ extension IsarAnimalTrackingQueryFilter
 
   QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
       latitudeLessThan(
-    int value,
-  ) {
+    double value, {
+    double epsilon = Filter.epsilon,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         LessCondition(
-          property: 2,
+          property: 1,
           value: value,
+          epsilon: epsilon,
         ),
       );
     });
@@ -634,13 +483,15 @@ extension IsarAnimalTrackingQueryFilter
 
   QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
       latitudeLessThanOrEqualTo(
-    int value,
-  ) {
+    double value, {
+    double epsilon = Filter.epsilon,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         LessOrEqualCondition(
-          property: 2,
+          property: 1,
           value: value,
+          epsilon: epsilon,
         ),
       );
     });
@@ -648,15 +499,17 @@ extension IsarAnimalTrackingQueryFilter
 
   QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
       latitudeBetween(
-    int lower,
-    int upper,
-  ) {
+    double lower,
+    double upper, {
+    double epsilon = Filter.epsilon,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         BetweenCondition(
-          property: 2,
+          property: 1,
           lower: lower,
           upper: upper,
+          epsilon: epsilon,
         ),
       );
     });
@@ -664,13 +517,15 @@ extension IsarAnimalTrackingQueryFilter
 
   QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
       longitudeEqualTo(
-    int value,
-  ) {
+    double value, {
+    double epsilon = Filter.epsilon,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         EqualCondition(
-          property: 3,
+          property: 2,
           value: value,
+          epsilon: epsilon,
         ),
       );
     });
@@ -678,13 +533,15 @@ extension IsarAnimalTrackingQueryFilter
 
   QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
       longitudeGreaterThan(
-    int value,
-  ) {
+    double value, {
+    double epsilon = Filter.epsilon,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         GreaterCondition(
-          property: 3,
+          property: 2,
           value: value,
+          epsilon: epsilon,
         ),
       );
     });
@@ -692,13 +549,15 @@ extension IsarAnimalTrackingQueryFilter
 
   QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
       longitudeGreaterThanOrEqualTo(
-    int value,
-  ) {
+    double value, {
+    double epsilon = Filter.epsilon,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         GreaterOrEqualCondition(
-          property: 3,
+          property: 2,
           value: value,
+          epsilon: epsilon,
         ),
       );
     });
@@ -706,13 +565,15 @@ extension IsarAnimalTrackingQueryFilter
 
   QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
       longitudeLessThan(
-    int value,
-  ) {
+    double value, {
+    double epsilon = Filter.epsilon,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         LessCondition(
-          property: 3,
+          property: 2,
           value: value,
+          epsilon: epsilon,
         ),
       );
     });
@@ -720,13 +581,15 @@ extension IsarAnimalTrackingQueryFilter
 
   QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
       longitudeLessThanOrEqualTo(
-    int value,
-  ) {
+    double value, {
+    double epsilon = Filter.epsilon,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         LessOrEqualCondition(
-          property: 3,
+          property: 2,
           value: value,
+          epsilon: epsilon,
         ),
       );
     });
@@ -734,15 +597,17 @@ extension IsarAnimalTrackingQueryFilter
 
   QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
       longitudeBetween(
-    int lower,
-    int upper,
-  ) {
+    double lower,
+    double upper, {
+    double epsilon = Filter.epsilon,
+  }) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         BetweenCondition(
-          property: 3,
+          property: 2,
           lower: lower,
           upper: upper,
+          epsilon: epsilon,
         ),
       );
     });
@@ -755,7 +620,7 @@ extension IsarAnimalTrackingQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         EqualCondition(
-          property: 4,
+          property: 3,
           value: value,
         ),
       );
@@ -769,7 +634,7 @@ extension IsarAnimalTrackingQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         GreaterCondition(
-          property: 4,
+          property: 3,
           value: value,
         ),
       );
@@ -783,7 +648,7 @@ extension IsarAnimalTrackingQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         GreaterOrEqualCondition(
-          property: 4,
+          property: 3,
           value: value,
         ),
       );
@@ -797,7 +662,7 @@ extension IsarAnimalTrackingQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         LessCondition(
-          property: 4,
+          property: 3,
           value: value,
         ),
       );
@@ -811,7 +676,7 @@ extension IsarAnimalTrackingQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         LessOrEqualCondition(
-          property: 4,
+          property: 3,
           value: value,
         ),
       );
@@ -826,7 +691,7 @@ extension IsarAnimalTrackingQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         BetweenCondition(
-          property: 4,
+          property: 3,
           lower: lower,
           upper: upper,
         ),
@@ -842,7 +707,7 @@ extension IsarAnimalTrackingQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         EqualCondition(
-          property: 5,
+          property: 4,
           value: value,
           caseSensitive: caseSensitive,
         ),
@@ -858,7 +723,7 @@ extension IsarAnimalTrackingQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         GreaterCondition(
-          property: 5,
+          property: 4,
           value: value,
           caseSensitive: caseSensitive,
         ),
@@ -874,7 +739,7 @@ extension IsarAnimalTrackingQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         GreaterOrEqualCondition(
-          property: 5,
+          property: 4,
           value: value,
           caseSensitive: caseSensitive,
         ),
@@ -890,7 +755,7 @@ extension IsarAnimalTrackingQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         LessCondition(
-          property: 5,
+          property: 4,
           value: value,
           caseSensitive: caseSensitive,
         ),
@@ -906,7 +771,7 @@ extension IsarAnimalTrackingQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         LessOrEqualCondition(
-          property: 5,
+          property: 4,
           value: value,
           caseSensitive: caseSensitive,
         ),
@@ -923,7 +788,7 @@ extension IsarAnimalTrackingQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         BetweenCondition(
-          property: 5,
+          property: 4,
           lower: lower,
           upper: upper,
           caseSensitive: caseSensitive,
@@ -940,7 +805,7 @@ extension IsarAnimalTrackingQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         StartsWithCondition(
-          property: 5,
+          property: 4,
           value: value,
           caseSensitive: caseSensitive,
         ),
@@ -956,7 +821,7 @@ extension IsarAnimalTrackingQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         EndsWithCondition(
-          property: 5,
+          property: 4,
           value: value,
           caseSensitive: caseSensitive,
         ),
@@ -969,7 +834,7 @@ extension IsarAnimalTrackingQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         ContainsCondition(
-          property: 5,
+          property: 4,
           value: value,
           caseSensitive: caseSensitive,
         ),
@@ -982,7 +847,7 @@ extension IsarAnimalTrackingQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         MatchesCondition(
-          property: 5,
+          property: 4,
           wildcard: pattern,
           caseSensitive: caseSensitive,
         ),
@@ -995,7 +860,7 @@ extension IsarAnimalTrackingQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         const EqualCondition(
-          property: 5,
+          property: 4,
           value: '',
         ),
       );
@@ -1007,7 +872,7 @@ extension IsarAnimalTrackingQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         const GreaterCondition(
-          property: 5,
+          property: 4,
           value: '',
         ),
       );
@@ -1022,7 +887,7 @@ extension IsarAnimalTrackingQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         EqualCondition(
-          property: 6,
+          property: 5,
           value: value,
           caseSensitive: caseSensitive,
         ),
@@ -1038,7 +903,7 @@ extension IsarAnimalTrackingQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         GreaterCondition(
-          property: 6,
+          property: 5,
           value: value,
           caseSensitive: caseSensitive,
         ),
@@ -1054,7 +919,7 @@ extension IsarAnimalTrackingQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         GreaterOrEqualCondition(
-          property: 6,
+          property: 5,
           value: value,
           caseSensitive: caseSensitive,
         ),
@@ -1070,7 +935,7 @@ extension IsarAnimalTrackingQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         LessCondition(
-          property: 6,
+          property: 5,
           value: value,
           caseSensitive: caseSensitive,
         ),
@@ -1086,7 +951,7 @@ extension IsarAnimalTrackingQueryFilter
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         LessOrEqualCondition(
-          property: 6,
+          property: 5,
           value: value,
           caseSensitive: caseSensitive,
         ),
@@ -1096,6 +961,186 @@ extension IsarAnimalTrackingQueryFilter
 
   QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
       speciesIdBetween(
+    String lower,
+    String upper, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        BetweenCondition(
+          property: 5,
+          lower: lower,
+          upper: upper,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
+      speciesIdStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        StartsWithCondition(
+          property: 5,
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
+      speciesIdEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        EndsWithCondition(
+          property: 5,
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
+      speciesIdContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        ContainsCondition(
+          property: 5,
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
+      speciesIdMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        MatchesCondition(
+          property: 5,
+          wildcard: pattern,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
+      speciesIdIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        const EqualCondition(
+          property: 5,
+          value: '',
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
+      speciesIdIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        const GreaterCondition(
+          property: 5,
+          value: '',
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
+      speciesNameEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        EqualCondition(
+          property: 6,
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
+      speciesNameGreaterThan(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        GreaterCondition(
+          property: 6,
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
+      speciesNameGreaterThanOrEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        GreaterOrEqualCondition(
+          property: 6,
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
+      speciesNameLessThan(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        LessCondition(
+          property: 6,
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
+      speciesNameLessThanOrEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        LessOrEqualCondition(
+          property: 6,
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
+      speciesNameBetween(
     String lower,
     String upper, {
     bool caseSensitive = true,
@@ -1113,7 +1158,7 @@ extension IsarAnimalTrackingQueryFilter
   }
 
   QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
-      speciesIdStartsWith(
+      speciesNameStartsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1129,7 +1174,7 @@ extension IsarAnimalTrackingQueryFilter
   }
 
   QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
-      speciesIdEndsWith(
+      speciesNameEndsWith(
     String value, {
     bool caseSensitive = true,
   }) {
@@ -1145,7 +1190,7 @@ extension IsarAnimalTrackingQueryFilter
   }
 
   QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
-      speciesIdContains(String value, {bool caseSensitive = true}) {
+      speciesNameContains(String value, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         ContainsCondition(
@@ -1158,7 +1203,7 @@ extension IsarAnimalTrackingQueryFilter
   }
 
   QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
-      speciesIdMatches(String pattern, {bool caseSensitive = true}) {
+      speciesNameMatches(String pattern, {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         MatchesCondition(
@@ -1171,7 +1216,7 @@ extension IsarAnimalTrackingQueryFilter
   }
 
   QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
-      speciesIdIsEmpty() {
+      speciesNameIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         const EqualCondition(
@@ -1183,11 +1228,191 @@ extension IsarAnimalTrackingQueryFilter
   }
 
   QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
-      speciesIdIsNotEmpty() {
+      speciesNameIsNotEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.addFilterCondition(
         const GreaterCondition(
           property: 6,
+          value: '',
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
+      speciesCommonNameEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        EqualCondition(
+          property: 7,
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
+      speciesCommonNameGreaterThan(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        GreaterCondition(
+          property: 7,
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
+      speciesCommonNameGreaterThanOrEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        GreaterOrEqualCondition(
+          property: 7,
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
+      speciesCommonNameLessThan(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        LessCondition(
+          property: 7,
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
+      speciesCommonNameLessThanOrEqualTo(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        LessOrEqualCondition(
+          property: 7,
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
+      speciesCommonNameBetween(
+    String lower,
+    String upper, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        BetweenCondition(
+          property: 7,
+          lower: lower,
+          upper: upper,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
+      speciesCommonNameStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        StartsWithCondition(
+          property: 7,
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
+      speciesCommonNameEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        EndsWithCondition(
+          property: 7,
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
+      speciesCommonNameContains(String value, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        ContainsCondition(
+          property: 7,
+          value: value,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
+      speciesCommonNameMatches(String pattern, {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        MatchesCondition(
+          property: 7,
+          wildcard: pattern,
+          caseSensitive: caseSensitive,
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
+      speciesCommonNameIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        const EqualCondition(
+          property: 7,
+          value: '',
+        ),
+      );
+    });
+  }
+
+  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterFilterCondition>
+      speciesCommonNameIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(
+        const GreaterCondition(
+          property: 7,
           value: '',
         ),
       );
@@ -1215,65 +1440,44 @@ extension IsarAnimalTrackingQuerySortBy
   }
 
   QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterSortBy>
-      sortByDescription({bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(
-        1,
-        caseSensitive: caseSensitive,
-      );
-    });
-  }
-
-  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterSortBy>
-      sortByDescriptionDesc({bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(
-        1,
-        sort: Sort.desc,
-        caseSensitive: caseSensitive,
-      );
-    });
-  }
-
-  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterSortBy>
       sortByLatitude() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(2);
+      return query.addSortBy(1);
     });
   }
 
   QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterSortBy>
       sortByLatitudeDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(2, sort: Sort.desc);
+      return query.addSortBy(1, sort: Sort.desc);
     });
   }
 
   QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterSortBy>
       sortByLongitude() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(3);
+      return query.addSortBy(2);
     });
   }
 
   QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterSortBy>
       sortByLongitudeDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(3, sort: Sort.desc);
+      return query.addSortBy(2, sort: Sort.desc);
     });
   }
 
   QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterSortBy>
       sortByLocationTimestamp() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(4);
+      return query.addSortBy(3);
     });
   }
 
   QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterSortBy>
       sortByLocationTimestampDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(4, sort: Sort.desc);
+      return query.addSortBy(3, sort: Sort.desc);
     });
   }
 
@@ -1281,7 +1485,7 @@ extension IsarAnimalTrackingQuerySortBy
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(
-        5,
+        4,
         caseSensitive: caseSensitive,
       );
     });
@@ -1291,7 +1495,7 @@ extension IsarAnimalTrackingQuerySortBy
       sortByNameDesc({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(
-        5,
+        4,
         sort: Sort.desc,
         caseSensitive: caseSensitive,
       );
@@ -1302,7 +1506,7 @@ extension IsarAnimalTrackingQuerySortBy
       sortBySpeciesId({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(
-        6,
+        5,
         caseSensitive: caseSensitive,
       );
     });
@@ -1312,7 +1516,49 @@ extension IsarAnimalTrackingQuerySortBy
       sortBySpeciesIdDesc({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addSortBy(
+        5,
+        sort: Sort.desc,
+        caseSensitive: caseSensitive,
+      );
+    });
+  }
+
+  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterSortBy>
+      sortBySpeciesName({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(
         6,
+        caseSensitive: caseSensitive,
+      );
+    });
+  }
+
+  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterSortBy>
+      sortBySpeciesNameDesc({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(
+        6,
+        sort: Sort.desc,
+        caseSensitive: caseSensitive,
+      );
+    });
+  }
+
+  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterSortBy>
+      sortBySpeciesCommonName({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(
+        7,
+        caseSensitive: caseSensitive,
+      );
+    });
+  }
+
+  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterSortBy>
+      sortBySpeciesCommonNameDesc({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(
+        7,
         sort: Sort.desc,
         caseSensitive: caseSensitive,
       );
@@ -1337,86 +1583,100 @@ extension IsarAnimalTrackingQuerySortThenBy
   }
 
   QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterSortBy>
-      thenByDescription({bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(1, caseSensitive: caseSensitive);
-    });
-  }
-
-  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterSortBy>
-      thenByDescriptionDesc({bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(1, sort: Sort.desc, caseSensitive: caseSensitive);
-    });
-  }
-
-  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterSortBy>
       thenByLatitude() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(2);
+      return query.addSortBy(1);
     });
   }
 
   QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterSortBy>
       thenByLatitudeDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(2, sort: Sort.desc);
+      return query.addSortBy(1, sort: Sort.desc);
     });
   }
 
   QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterSortBy>
       thenByLongitude() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(3);
+      return query.addSortBy(2);
     });
   }
 
   QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterSortBy>
       thenByLongitudeDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(3, sort: Sort.desc);
+      return query.addSortBy(2, sort: Sort.desc);
     });
   }
 
   QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterSortBy>
       thenByLocationTimestamp() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(4);
+      return query.addSortBy(3);
     });
   }
 
   QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterSortBy>
       thenByLocationTimestampDesc() {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(4, sort: Sort.desc);
+      return query.addSortBy(3, sort: Sort.desc);
     });
   }
 
   QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterSortBy> thenByName(
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(5, caseSensitive: caseSensitive);
+      return query.addSortBy(4, caseSensitive: caseSensitive);
     });
   }
 
   QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterSortBy>
       thenByNameDesc({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(5, sort: Sort.desc, caseSensitive: caseSensitive);
+      return query.addSortBy(4, sort: Sort.desc, caseSensitive: caseSensitive);
     });
   }
 
   QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterSortBy>
       thenBySpeciesId({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addSortBy(6, caseSensitive: caseSensitive);
+      return query.addSortBy(5, caseSensitive: caseSensitive);
     });
   }
 
   QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterSortBy>
       thenBySpeciesIdDesc({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(5, sort: Sort.desc, caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterSortBy>
+      thenBySpeciesName({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(6, caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterSortBy>
+      thenBySpeciesNameDesc({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
       return query.addSortBy(6, sort: Sort.desc, caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterSortBy>
+      thenBySpeciesCommonName({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(7, caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterSortBy>
+      thenBySpeciesCommonNameDesc({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(7, sort: Sort.desc, caseSensitive: caseSensitive);
     });
   }
 }
@@ -1424,44 +1684,51 @@ extension IsarAnimalTrackingQuerySortThenBy
 extension IsarAnimalTrackingQueryWhereDistinct
     on QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QDistinct> {
   QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterDistinct>
-      distinctByDescription({bool caseSensitive = true}) {
-    return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(1, caseSensitive: caseSensitive);
-    });
-  }
-
-  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterDistinct>
       distinctByLatitude() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(2);
+      return query.addDistinctBy(1);
     });
   }
 
   QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterDistinct>
       distinctByLongitude() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(3);
+      return query.addDistinctBy(2);
     });
   }
 
   QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterDistinct>
       distinctByLocationTimestamp() {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(4);
+      return query.addDistinctBy(3);
     });
   }
 
   QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterDistinct>
       distinctByName({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
-      return query.addDistinctBy(5, caseSensitive: caseSensitive);
+      return query.addDistinctBy(4, caseSensitive: caseSensitive);
     });
   }
 
   QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterDistinct>
       distinctBySpeciesId({bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(5, caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterDistinct>
+      distinctBySpeciesName({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(6, caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<IsarAnimalTracking, IsarAnimalTracking, QAfterDistinct>
+      distinctBySpeciesCommonName({bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(7, caseSensitive: caseSensitive);
     });
   }
 }
@@ -1474,41 +1741,48 @@ extension IsarAnimalTrackingQueryProperty1
     });
   }
 
-  QueryBuilder<IsarAnimalTracking, String, QAfterProperty>
-      descriptionProperty() {
+  QueryBuilder<IsarAnimalTracking, double, QAfterProperty> latitudeProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addProperty(1);
     });
   }
 
-  QueryBuilder<IsarAnimalTracking, int, QAfterProperty> latitudeProperty() {
+  QueryBuilder<IsarAnimalTracking, double, QAfterProperty> longitudeProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addProperty(2);
-    });
-  }
-
-  QueryBuilder<IsarAnimalTracking, int, QAfterProperty> longitudeProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addProperty(3);
     });
   }
 
   QueryBuilder<IsarAnimalTracking, DateTime, QAfterProperty>
       locationTimestampProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addProperty(4);
+      return query.addProperty(3);
     });
   }
 
   QueryBuilder<IsarAnimalTracking, String, QAfterProperty> nameProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addProperty(5);
+      return query.addProperty(4);
     });
   }
 
   QueryBuilder<IsarAnimalTracking, String, QAfterProperty> speciesIdProperty() {
     return QueryBuilder.apply(this, (query) {
+      return query.addProperty(5);
+    });
+  }
+
+  QueryBuilder<IsarAnimalTracking, String, QAfterProperty>
+      speciesNameProperty() {
+    return QueryBuilder.apply(this, (query) {
       return query.addProperty(6);
+    });
+  }
+
+  QueryBuilder<IsarAnimalTracking, String, QAfterProperty>
+      speciesCommonNameProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addProperty(7);
     });
   }
 }
@@ -1521,44 +1795,51 @@ extension IsarAnimalTrackingQueryProperty2<R>
     });
   }
 
-  QueryBuilder<IsarAnimalTracking, (R, String), QAfterProperty>
-      descriptionProperty() {
+  QueryBuilder<IsarAnimalTracking, (R, double), QAfterProperty>
+      latitudeProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addProperty(1);
     });
   }
 
-  QueryBuilder<IsarAnimalTracking, (R, int), QAfterProperty>
-      latitudeProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addProperty(2);
-    });
-  }
-
-  QueryBuilder<IsarAnimalTracking, (R, int), QAfterProperty>
+  QueryBuilder<IsarAnimalTracking, (R, double), QAfterProperty>
       longitudeProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addProperty(3);
+      return query.addProperty(2);
     });
   }
 
   QueryBuilder<IsarAnimalTracking, (R, DateTime), QAfterProperty>
       locationTimestampProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addProperty(4);
+      return query.addProperty(3);
     });
   }
 
   QueryBuilder<IsarAnimalTracking, (R, String), QAfterProperty> nameProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addProperty(5);
+      return query.addProperty(4);
     });
   }
 
   QueryBuilder<IsarAnimalTracking, (R, String), QAfterProperty>
       speciesIdProperty() {
     return QueryBuilder.apply(this, (query) {
+      return query.addProperty(5);
+    });
+  }
+
+  QueryBuilder<IsarAnimalTracking, (R, String), QAfterProperty>
+      speciesNameProperty() {
+    return QueryBuilder.apply(this, (query) {
       return query.addProperty(6);
+    });
+  }
+
+  QueryBuilder<IsarAnimalTracking, (R, String), QAfterProperty>
+      speciesCommonNameProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addProperty(7);
     });
   }
 }
@@ -1571,45 +1852,52 @@ extension IsarAnimalTrackingQueryProperty3<R1, R2>
     });
   }
 
-  QueryBuilder<IsarAnimalTracking, (R1, R2, String), QOperations>
-      descriptionProperty() {
+  QueryBuilder<IsarAnimalTracking, (R1, R2, double), QOperations>
+      latitudeProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addProperty(1);
     });
   }
 
-  QueryBuilder<IsarAnimalTracking, (R1, R2, int), QOperations>
-      latitudeProperty() {
-    return QueryBuilder.apply(this, (query) {
-      return query.addProperty(2);
-    });
-  }
-
-  QueryBuilder<IsarAnimalTracking, (R1, R2, int), QOperations>
+  QueryBuilder<IsarAnimalTracking, (R1, R2, double), QOperations>
       longitudeProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addProperty(3);
+      return query.addProperty(2);
     });
   }
 
   QueryBuilder<IsarAnimalTracking, (R1, R2, DateTime), QOperations>
       locationTimestampProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addProperty(4);
+      return query.addProperty(3);
     });
   }
 
   QueryBuilder<IsarAnimalTracking, (R1, R2, String), QOperations>
       nameProperty() {
     return QueryBuilder.apply(this, (query) {
-      return query.addProperty(5);
+      return query.addProperty(4);
     });
   }
 
   QueryBuilder<IsarAnimalTracking, (R1, R2, String), QOperations>
       speciesIdProperty() {
     return QueryBuilder.apply(this, (query) {
+      return query.addProperty(5);
+    });
+  }
+
+  QueryBuilder<IsarAnimalTracking, (R1, R2, String), QOperations>
+      speciesNameProperty() {
+    return QueryBuilder.apply(this, (query) {
       return query.addProperty(6);
+    });
+  }
+
+  QueryBuilder<IsarAnimalTracking, (R1, R2, String), QOperations>
+      speciesCommonNameProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addProperty(7);
     });
   }
 }

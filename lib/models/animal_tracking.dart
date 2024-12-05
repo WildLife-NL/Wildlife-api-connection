@@ -1,3 +1,4 @@
+import 'package:wildlife_api_connection/models/isar/isar_animal_tracking.dart';
 import 'package:wildlife_api_connection/models/location.dart';
 import 'package:wildlife_api_connection/models/species.dart';
 
@@ -31,4 +32,21 @@ class AnimalTracking {
         "name": name,
         "species": species.toJson(),
       };
+
+  factory AnimalTracking.fromIsar(IsarAnimalTracking isarAnimalTracking) {
+    return AnimalTracking(
+      id: isarAnimalTracking.id.toString(),
+      location: Location(
+        latitude: isarAnimalTracking.latitude.toDouble(),
+        longitude: isarAnimalTracking.longitude.toDouble(),
+      ),
+      locationTimestamp: isarAnimalTracking.locationTimestamp,
+      name: isarAnimalTracking.name,
+      species: Species(
+        id: isarAnimalTracking.speciesId,
+        name: isarAnimalTracking.speciesName,
+        commonName: isarAnimalTracking.speciesCommonName,
+      ),
+    );
+  }
 }
