@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:http/http.dart' as http;
@@ -18,7 +19,7 @@ class ApiClient {
     bool authenticated = true,
   }) async {
     headers = await _buildHeaders(headers, authenticated);
-
+    debugPrint("GET: $baseUrl/$url");
     return await http.get(
       Uri.parse('$baseUrl/$url'),
       headers: headers,
@@ -32,7 +33,7 @@ class ApiClient {
     bool authenticated = true,
   }) async {
     headers = await _buildHeaders(headers, authenticated);
-
+    debugPrint("POST: $baseUrl/$url");
     http.Response response = await http.post(
       Uri.parse('$baseUrl/$url'),
       body: jsonEncode(body),
