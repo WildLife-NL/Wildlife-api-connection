@@ -136,7 +136,7 @@ void main() {
       const description = 'test';
       const speciesId = '2d22';
       const location = {"latitude": -90.123, "longitude": -180.123};
-      var timestamp = DateTime.utc(2024, 10, 16, 8, 29, 36, 381, 911);
+      var timestamp = DateTime(2024, 10, 16, 8, 29, 36, 381, 911);
 
       final response = http.Response(jsonEncode(responseJson), HttpStatus.ok);
 
@@ -223,7 +223,7 @@ void main() {
           ),
         ],
       );
-      var timestamp = DateTime.utc(2024, 10, 16, 8, 29, 36, 381, 911);
+      var timestamp = DateTime(2024, 10, 16, 8, 29, 36, 381, 911);
 
       final response = http.Response(jsonEncode(responseJson), HttpStatus.ok);
 
@@ -278,7 +278,7 @@ void main() {
       const description = 'test';
       const speciesId = '9d99';
       const location = {"latitude": -90, "longitude": -180};
-      var timestamp = DateTime.utc(2024, 10, 16, 8, 29, 36, 381, 911);
+      var timestamp = DateTime(2024, 10, 16, 8, 29, 36, 381, 911);
 
       var responseJson = {
         "title": "Bad Request",
