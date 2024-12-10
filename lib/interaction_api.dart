@@ -12,8 +12,13 @@ class InteractionApi {
 
   InteractionApi(this.client);
 
-  Future<Interaction> create(String description, Location location,
-      String speciesId, int typeId) async {
+  Future<Interaction> create(
+    String description,
+    Location location,
+    String speciesId,
+    int typeId, [
+    DateTime? timestampOverride,
+  ]) async {
     http.Response response = await client.post(
       'interaction/',
       {
@@ -21,6 +26,8 @@ class InteractionApi {
         "location": location.toJson(),
         "speciesID": speciesId,
         "typeID": typeId,
+        "timestamp": timestampOverride?.toUtc().toIso8601String() ??
+            DateTime.now().toUtc().toIso8601String(),
       },
       authenticated: true,
     );

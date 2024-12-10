@@ -136,6 +136,7 @@ void main() {
       const description = 'test';
       const speciesId = '2d22';
       const location = {"latitude": -90.123, "longitude": -180.123};
+      var timestamp = DateTime.utc(2024, 10, 16, 8, 29, 36, 381, 911);
 
       final response = http.Response(jsonEncode(responseJson), HttpStatus.ok);
 
@@ -146,6 +147,7 @@ void main() {
           "location": location,
           "speciesID": speciesId,
           "typeID": type,
+          "timestamp": timestamp.toIso8601String(),
         },
         authenticated: true,
       )).thenAnswer((_) async {
@@ -158,6 +160,7 @@ void main() {
         Location.fromJson(location),
         speciesId,
         type,
+        timestamp,
       );
 
       // Assert
@@ -167,6 +170,13 @@ void main() {
       expect(result.location.longitude, location['longitude']);
       expect(result.species.id, speciesId);
       expect(result.type.id, type);
+
+      expect(result.timestamp.year, timestamp.year);
+      expect(result.timestamp.month, timestamp.month);
+      expect(result.timestamp.day, timestamp.day);
+      expect(result.timestamp.hour, timestamp.hour);
+      expect(result.timestamp.minute, timestamp.minute);
+      expect(result.timestamp.microsecond, timestamp.microsecond);
     });
 
     test(
@@ -213,6 +223,7 @@ void main() {
           ),
         ],
       );
+      var timestamp = DateTime.utc(2024, 10, 16, 8, 29, 36, 381, 911);
 
       final response = http.Response(jsonEncode(responseJson), HttpStatus.ok);
 
@@ -223,6 +234,7 @@ void main() {
           "location": location,
           "speciesID": speciesId,
           "typeID": type,
+          "timestamp": timestamp.toIso8601String(),
         },
       )).thenAnswer((_) async {
         return response;
@@ -234,6 +246,7 @@ void main() {
         Location.fromJson(location),
         speciesId,
         type,
+        timestamp,
       );
 
       // Assert
@@ -249,6 +262,13 @@ void main() {
           questionnaire.interactionType.id);
       expect(result.questionnaire!.questions![0].id,
           questionnaire.questions![0].id);
+
+      expect(result.timestamp.year, timestamp.year);
+      expect(result.timestamp.month, timestamp.month);
+      expect(result.timestamp.day, timestamp.day);
+      expect(result.timestamp.hour, timestamp.hour);
+      expect(result.timestamp.minute, timestamp.minute);
+      expect(result.timestamp.microsecond, timestamp.microsecond);
     });
 
     test('interaction create throws exception when given invalid speciesId',
@@ -258,6 +278,7 @@ void main() {
       const description = 'test';
       const speciesId = '9d99';
       const location = {"latitude": -90, "longitude": -180};
+      var timestamp = DateTime.utc(2024, 10, 16, 8, 29, 36, 381, 911);
 
       var responseJson = {
         "title": "Bad Request",
@@ -274,6 +295,7 @@ void main() {
           "location": location,
           "speciesID": speciesId,
           "typeID": type,
+          "timestamp": timestamp.toIso8601String(),
         },
         authenticated: true,
       )).thenAnswer((_) async {
@@ -287,13 +309,13 @@ void main() {
             Location.fromJson(location),
             speciesId,
             type,
+            timestamp,
           ),
           throwsA(isA<Exception>()));
     });
 
     test('get my interactions returns list of interactions', () async {
       // Arrange
-
       final response = http.Response(jsonEncode([responseJson]), HttpStatus.ok);
 
       when(mockApiClient.get(

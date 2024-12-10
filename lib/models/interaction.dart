@@ -11,6 +11,7 @@ class Interaction {
   Location location;
   Species species;
   InteractionType type;
+  DateTime timestamp;
   Questionnaire? questionnaire;
 
   Interaction({
@@ -19,6 +20,7 @@ class Interaction {
     required this.location,
     required this.species,
     required this.type,
+    required this.timestamp,
     this.id,
     this.questionnaire,
   });
@@ -37,6 +39,7 @@ class Interaction {
       location: Location.fromJson(json['location']),
       species: Species.fromJson(json['species']),
       type: InteractionType.fromJson(json['type']),
+      timestamp: DateTime.tryParse(json['timestamp'])!,
       questionnaire: questionnaire,
     );
   }
