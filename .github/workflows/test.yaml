@@ -2,7 +2,7 @@ name: Flutter test
 on:
   workflow_dispatch:
   push:
-    branches: ["Main"]
+    branches: ["Main", "development"]
   pull_request:
 
 jobs:
