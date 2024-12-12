@@ -147,7 +147,7 @@ void main() {
           "location": location,
           "speciesID": speciesId,
           "typeID": type,
-          "timestamp": timestamp.toIso8601String(),
+          "timestamp": timestamp.toUtc().toIso8601String(),
         },
         authenticated: true,
       )).thenAnswer((_) async {
@@ -234,7 +234,7 @@ void main() {
           "location": location,
           "speciesID": speciesId,
           "typeID": type,
-          "timestamp": timestamp.toIso8601String(),
+          "timestamp": timestamp.toUtc().toIso8601String(),
         },
       )).thenAnswer((_) async {
         return response;
@@ -295,7 +295,7 @@ void main() {
           "location": location,
           "speciesID": speciesId,
           "typeID": type,
-          "timestamp": timestamp.toIso8601String(),
+          "timestamp": timestamp.toUtc().toIso8601String(),
         },
         authenticated: true,
       )).thenAnswer((_) async {
