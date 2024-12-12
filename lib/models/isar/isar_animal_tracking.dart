@@ -15,7 +15,7 @@ class IsarAnimalTracking {
   final String speciesCommonName;
 
   IsarAnimalTracking({
-    required this.id,
+    this.id = Isar.autoIncrement,
     required this.latitude,
     required this.longitude,
     required this.locationTimestamp,
@@ -38,10 +38,8 @@ class IsarAnimalTracking {
     };
   }
 
-  factory IsarAnimalTracking.fromAnimalTracking(
-      AnimalTracking animalTracking, int id) {
+  factory IsarAnimalTracking.fromAnimalTracking(AnimalTracking animalTracking) {
     return IsarAnimalTracking(
-      id: id,
       latitude: animalTracking.location.latitude,
       longitude: animalTracking.location.longitude,
       locationTimestamp: animalTracking.locationTimestamp,

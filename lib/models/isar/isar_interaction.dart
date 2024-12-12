@@ -12,7 +12,7 @@ class IsarInteraction {
   final int typeId;
 
   IsarInteraction({
-    required this.id,
+    this.id = Isar.autoIncrement,
     required this.description,
     required this.latitude,
     required this.longitude,
