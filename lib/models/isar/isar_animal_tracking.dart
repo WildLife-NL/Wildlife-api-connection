@@ -5,7 +5,7 @@ part 'isar_animal_tracking.g.dart';
 
 @collection
 class IsarAnimalTracking {
-  final int id;
+  Id id = Isar.autoIncrement;
   final double latitude;
   final double longitude;
   final DateTime locationTimestamp;

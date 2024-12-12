@@ -4,7 +4,7 @@ part 'isar_interaction.g.dart';
 
 @collection
 class IsarInteraction {
-  final int id;
+  Id id = Isar.autoIncrement;
   final String description;
   final int latitude;
   final int longitude;
