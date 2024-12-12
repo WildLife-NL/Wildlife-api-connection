@@ -26,8 +26,8 @@ class InteractionApi {
         "location": location.toJson(),
         "speciesID": speciesId,
         "typeID": typeId,
-        "timestamp": timestampOverride?.toIso8601String() ??
-            DateTime.now().toIso8601String(),
+        "timestamp": timestampOverride?.toUtc().toIso8601String() ??
+            DateTime.now().toUtc().toIso8601String(),
       },
       authenticated: true,
     );
