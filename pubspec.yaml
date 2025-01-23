@@ -1,7 +1,7 @@
 name: wildlife_api_connection
 description: "A new Flutter package project."
 version: 0.0.1
-homepage:
+# homepage:
 
 environment:
   sdk: ^3.5.2
@@ -10,17 +10,27 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  http: ^1.2.2
+  latlong2: ^0.9.1
+  shared_preferences: ^2.3.2
+  isar: ^3.1.0+1
+  isar_flutter_libs: ^3.1.0+1
+  path_provider: ^2.1.5
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^4.0.0
+  mockito: ^5.4.4
+  build_runner: ^2.4.11
+  isar_generator: ^3.1.0+1
+
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
 # The following section is specific to Flutter packages.
-flutter:
+# flutter:
 
   # To add assets to your package, add an assets section, like this:
   # assets:
