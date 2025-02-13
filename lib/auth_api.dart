@@ -8,24 +8,18 @@ import 'package:wildlife_api_connection/models/user.dart';
 
 class AuthApi {
   final ApiClient client;
-  static const String url = 'https://wildlifenl-uu-michi011.apps.cl01.cp.its.uu.nl/auth/';
-  static const Map<String, String> headers = {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json, application/problem+json',
-  };
 
   AuthApi(this.client);
 
   Future<Map<String, dynamic>> authenticate(
       String displayNameApp, String email) async {
     http.Response response = await client.post(
-      url,
+      'auth/',
       {
         "displayNameApp": displayNameApp,
         "email": email,
       },
       authenticated: false,
-      headers: headers,
     );
 
     Map<String, dynamic>? json;
@@ -43,13 +37,12 @@ class AuthApi {
 
   Future<User> authorize(String email, String code) async {
     http.Response response = await client.put(
-      url,
+      'auth/',
       {
         "code": code,
         "email": email,
       },
       authenticated: false,
-      headers: headers,
     );
 
     Map<String, dynamic>? json;
